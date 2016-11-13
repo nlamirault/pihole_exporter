@@ -38,7 +38,7 @@ type TopSources struct {
 }
 
 type Metrics struct {
-	DomainsBeingBlocked String          `json:"domains_being_blocked"`
+	DomainsBeingBlocked string          `json:"domains_being_blocked"`
 	DNSQueriesToday     string          `json:"dns_queries_today"`
 	AdsBlockedToday     string          `json:"ads_blocked_today"`
 	AdsPercentageToday  string          `json:"ads_percentage_today"`
