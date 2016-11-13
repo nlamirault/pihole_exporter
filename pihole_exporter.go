@@ -81,18 +81,18 @@ var (
 	topQueries = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "", "top_queries"),
 		"Top queries.",
-		nil, nil,
+		[]string{"domain"}, nil,
 	)
 
 	topAds = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "", "top_ads"),
 		"Top Ads.",
-		nil, nil,
+		[]string{"domain"}, nil,
 	)
 	topSources = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "", "top_sources"),
 		"Top sources.",
-		nil, nil,
+		[]string{"client"}, nil,
 	)
 	queryTypes = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "", "query_types"),
@@ -143,37 +143,23 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 		log.Errorf("Pihole error: %s", err.Error())
 		return
 	}
-	if val, err := strconv.ParseFloat(resp.DomainsBeingBlocked, 64); err == nil {
-		ch <- prometheus.MustNewConstMetric(
-			domainsBeingBlocked, prometheus.GaugeValue, val)
+	log.Infof("PiHole metrics: %#v", resp)
+	storeMetric(ch, resp.DomainsBeingBlocked, domainsBeingBlocked)
+	storeMetric(ch, resp.DNSQueriesToday, dnsQueries)
+	storeMetric(ch, resp.AdsBlockedToday, adsBlocked)
+	storeMetric(ch, resp.AdsPercentageToday, adsPercentage)
+	storeMetric(ch, resp.QueryA, queryTypes, "A")
+	storeMetric(ch, resp.QueryAAAA, queryTypes, "AAAA")
+	storeMetric(ch, resp.QueryPTR, queryTypes, "PTR")
+	storeMetric(ch, resp.QuerySOA, queryTypes, "SOA")
+	for domain, hits := range resp.TopQueries {
+		storeMetric(ch, hits, topQueries, domain)
 	}
-	if val, err := strconv.ParseFloat(resp.DNSQueriesToday, 64); err == nil {
-		ch <- prometheus.MustNewConstMetric(
-			dnsQueries, prometheus.GaugeValue, val)
+	for domain, hits := range resp.TopAds {
+		storeMetric(ch, hits, topAds, domain)
 	}
-	if val, err := strconv.ParseFloat(resp.AdsBlockedToday, 64); err == nil {
-		ch <- prometheus.MustNewConstMetric(
-			adsBlocked, prometheus.GaugeValue, val)
-	}
-	if val, err := strconv.ParseFloat(resp.AdsPercentageToday, 64); err == nil {
-		ch <- prometheus.MustNewConstMetric(
-			adsPercentage, prometheus.GaugeValue, val)
-	}
-	if val, err := strconv.ParseFloat(resp.QueryA, 64); err == nil {
-		ch <- prometheus.MustNewConstMetric(
-			queryTypes, prometheus.GaugeValue, val, "A")
-	}
-	if val, err := strconv.ParseFloat(resp.QueryAAAA, 64); err == nil {
-		ch <- prometheus.MustNewConstMetric(
-			queryTypes, prometheus.GaugeValue, val, "AAAA")
-	}
-	if val, err := strconv.ParseFloat(resp.QueryPTR, 64); err == nil {
-		ch <- prometheus.MustNewConstMetric(
-			queryTypes, prometheus.GaugeValue, val, "PTR")
-	}
-	if val, err := strconv.ParseFloat(resp.QuerySOA, 64); err == nil {
-		ch <- prometheus.MustNewConstMetric(
-			queryTypes, prometheus.GaugeValue, val, "SOA")
+	for client, requests := range resp.TopSources {
+		storeMetric(ch, requests, topSources, client)
 	}
 
 	log.Infof("Pihole exporter finished")
@@ -233,4 +219,14 @@ func usageAndExit(message string, exitCode int) {
 	}
 	flag.Usage()
 	os.Exit(exitCode)
+}
+
+func storeMetric(ch chan<- prometheus.Metric, value string, desc *prometheus.Desc, labels ...string) {
+	if val, err := strconv.ParseFloat(value, 64); err == nil {
+		ch <- prometheus.MustNewConstMetric(
+			desc, prometheus.GaugeValue, val, labels...)
+	} else {
+		log.Errorf("Can't store metric %s into %s: %s", value, desc, err.Error())
+	}
+
 }

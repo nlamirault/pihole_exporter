@@ -25,32 +25,32 @@ type AdsOverTime struct {
 	Stats map[string]string
 }
 
-type TopQueries struct {
-	Stats map[string]string
-}
+// type TopQueries struct {
+// 	Stats map[string]string
+// }
 
-type TopAds struct {
-	Stats map[string]string
-}
+// type TopAds struct {
+// 	Stats map[string]string
+// }
 
-type TopSources struct {
-	Stats map[string]string
-}
+// type TopSources struct {
+// 	Stats map[string]string
+// }
 
 type Metrics struct {
-	DomainsBeingBlocked string          `json:"domains_being_blocked"`
-	DNSQueriesToday     string          `json:"dns_queries_today"`
-	AdsBlockedToday     string          `json:"ads_blocked_today"`
-	AdsPercentageToday  string          `json:"ads_percentage_today"`
-	DomainsOverTime     DomainsOverTime `json:"domains_over_time"`
-	AdsOverTime         AdsOverTime     `json:"ads_over_time"`
-	TopQueries          TopQueries      `json:"top_queries"`
-	TopAds              TopAds          `json:"top_ads"`
-	QueryA              string          `json:"query[A]"`
-	QueryAAAA           string          `json:"query[AAAA]"`
-	QueryPTR            string          `json:"query[PTR]"`
-	QuerySOA            string          `json:"query[SOA]"`
-	Eight844            string          `json:"8.8.4.4"`
-	Eight888            string          `json:"8.8.8.8"`
-	TopSources          TopSources      `json:"top_sources"`
+	DomainsBeingBlocked string            `json:"domains_being_blocked"`
+	DNSQueriesToday     string            `json:"dns_queries_today"`
+	AdsBlockedToday     string            `json:"ads_blocked_today"`
+	AdsPercentageToday  string            `json:"ads_percentage_today"`
+	DomainsOverTime     DomainsOverTime   `json:"domains_over_time"`
+	AdsOverTime         AdsOverTime       `json:"ads_over_time"`
+	TopQueries          map[string]string `json:"top_queries"`
+	TopAds              map[string]string `json:"top_ads"`
+	TopSources          map[string]string `json:"top_sources"`
+	QueryA              string            `json:"query[A]"`
+	QueryAAAA           string            `json:"query[AAAA]"`
+	QueryPTR            string            `json:"query[PTR]"`
+	QuerySOA            string            `json:"query[SOA]"`
+	Eight844            string            `json:"8.8.4.4"`
+	Eight888            string            `json:"8.8.8.8"`
 }
