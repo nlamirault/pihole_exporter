@@ -161,7 +161,7 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 	}
 	if val, err := strconv.ParseFloat(resp.QueryA, 64); err == nil {
 		ch <- prometheus.MustNewConstMetric(
-			queryTypes, prometheus.GaugeValue, val, "A")
+			queryTypes, prometheus.GaugeValue, val, "A")
 	}
 	if val, err := strconv.ParseFloat(resp.QueryAAAA, 64); err == nil {
 		ch <- prometheus.MustNewConstMetric(
