@@ -30,5 +30,5 @@ scrape_configs:
       - targets: ['localhost:9191']
 
   - job_name: 'pihole'
-    target_groups:
+    static_configs:
       - targets: ['localhost:9311']

@@ -1,5 +1,6 @@
 # Go
 pihole_exporter
+pihole_exporter-*
 
 # Files
 .DS_Store
