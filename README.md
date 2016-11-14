@@ -11,6 +11,8 @@ This Prometheus exporter check your network connection. Metrics are :
 * Download bandwidth
 * Upload bandwidth
 
+![Dashboard](phile-0.1.0.png)
+
 
 ## Installation
 
@@ -54,6 +56,10 @@ Launch the Prometheus exporter :
         $ pihole_exporter -log.level=debug
 
 * Check that Prometheus find the exporter on `http://localhost:9090/targets`
+
+* Run Grafana and import the dashboard *dashboard.json*:
+
+        $ docker run -d --name=grafana -p 3000:3000 grafana/grafana
 
 
 ## Contributing
