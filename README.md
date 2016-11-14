@@ -11,7 +11,7 @@ This Prometheus exporter check your network connection. Metrics are :
 * Download bandwidth
 * Upload bandwidth
 
-![Dashboard](phile-0.1.0.png)
+![Dashboard](pihole-0.1.0.png)
 
 
 ## Installation
