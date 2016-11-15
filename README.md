@@ -6,10 +6,13 @@
 * Master : [![Circle CI](https://circleci.com/gh/nlamirault/pihole_exporter/tree/master.svg?style=svg)](https://circleci.com/gh/nlamirault/pihole_exporter/tree/master)
 * Develop : [![Circle CI](https://circleci.com/gh/nlamirault/pihole_exporter/tree/develop.svg?style=svg)](https://circleci.com/gh/nlamirault/pihole_exporter/tree/develop)
 
-This Prometheus exporter check your network connection. Metrics are :
-* Latency
-* Download bandwidth
-* Upload bandwidth
+This Prometheus exporter check your [Pi-Hole](https://pi-hole.net/) statistics. Available metrics are :
+* Ads blocked
+* Domains blocked
+* DNS Queries
+* Top Ads
+* Top Queries
+* Top clients
 
 ![Dashboard](pihole-0.1.0.png)
 
@@ -27,7 +30,7 @@ You can download the binaries :
 
 Launch the Prometheus exporter :
 
-    $ pihole_exporter -log.level=debug
+    $ pihole_exporter -log.level=debug -pihole http://192.168.1.2:8080
 
 
 ## Development
