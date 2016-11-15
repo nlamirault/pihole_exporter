@@ -22,11 +22,11 @@ import (
 	"testing"
 )
 
-type domoticzserver struct {
+type piholeserver struct {
 	*httptest.Server
 }
 
-func handler(server *domoticzserver, uri string, filename string) http.HandlerFunc {
+func handler(server *piholeserver, uri string, filename string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		b, err := ioutil.ReadFile(filename)
 		if err != nil {
@@ -36,50 +36,31 @@ func handler(server *domoticzserver, uri string, filename string) http.HandlerFu
 	}
 }
 
-func newDomoticzServer(uri string, filename string) *domoticzserver {
-	h := &domoticzserver{}
+func newPiholeServer(uri string, filename string) *piholeserver {
+	h := &piholeserver{}
 	h.Server = httptest.NewServer(handler(h, uri, filename))
 	return h
 }
 
-func getClientAndServer(t *testing.T, uri string, username string, password string, filename string) (*domoticzserver, *Client) {
-	h := newDomoticzServer(uri, filename)
-	client, err := NewClient(h.Listener.Addr().String(), username, password) // h.URL, username, password)
+func getClientAndServer(t *testing.T, uri string, username string, password string, filename string) (*piholeserver, *Client) {
+	h := newPiholeServer(uri, filename)
+	client, err := NewClient(h.URL) //h.Listener.Addr().String()) // h.URL, username, password)
 	if err != nil {
 		t.Fatalf("%v", err)
 	}
 	return h, client
 }
 
-func TestDomoticzGetAllDevicesWithEmptyResult(t *testing.T) {
-	server, client := getClientAndServer(t, "", "", "", "no_devices.json")
+func TestPiholeGetMetrics(t *testing.T) {
+	server, client := getClientAndServer(t, "", "", "", "stats.json")
 	defer server.Close()
-	devices, err := client.GetAllDevices()
+	metrics, err := client.GetMetrics()
 	if err != nil {
 		log.Fatalf("%v", err)
 	}
-	log.Infof("Devices response: %s", devices)
-	if devices.Status != "OK" || devices.Title != "Devices" {
-		log.Fatalf("Invalid devices response: %s", devices)
-	}
-}
-
-func TestDomoticzGetDevice(t *testing.T) {
-	server, client := getClientAndServer(t, "", "", "", "device.json")
-	defer server.Close()
-	device, err := client.GetDevice("123")
-	if err != nil {
-		log.Fatalf("%v", err)
-	}
-	log.Infof("Devices response: %s", device)
-	if device.Status != "OK" || device.Title != "Devices" {
-		log.Fatalf("Invalid device response: %s", device)
-	}
-	if len(device.Result) != 1 {
-		log.Fatalf("Invalid number of device: %s", device)
-	}
-	if device.Result[0].TypeImg != "temperature" ||
-		device.Result[0].Temp != 20.20 {
-		log.Fatalf("Invalid device response: %s", device)
+	log.Infof("Metrics response: %s", metrics)
+	if metrics.DomainsBeingBlocked != "101934" ||
+		metrics.DNSQueriesToday != "2593" {
+		log.Fatalf("Invalid metrics response: %s", metrics)
 	}
 }
