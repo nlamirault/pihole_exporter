@@ -1,0 +1,12 @@
+# Go
+pihole_exporter
+pihole_exporter-*
+
+# Files
+.DS_Store
+
+# Editor files
+$~
+*.swp
+*.swo
+*.swn
