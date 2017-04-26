@@ -1,4 +1,4 @@
-# Copyright (C) 2016 Nicolas Lamirault <nicolas.lamirault@gmail.com>
+# Copyright (C) 2016, 2017 Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ DIR = $(shell pwd)
 DOCKER = docker
 
 GO = go
-GLIDE = glide
 
 GOX = gox -os="linux darwin windows freebsd openbsd netbsd"
 GOX_ARGS = "-output={{.Dir}}-$(VERSION)_{{.OS}}_{{.Arch}}"
@@ -109,6 +108,16 @@ errcheck: ## Launch go errcheck
 .PHONY: coverage
 coverage: ## Launch code coverage
 	@$(foreach pkg,$(PKGS),$(GO) test -cover $(pkg) $(glide novendor) || exit;)
+
+docker-build: ## Build Docker image
+	@echo -e "$(OK_COLOR)Docker build $(APP):$(VERSION)$(NO_COLOR)"
+	@docker build -t $(APP):$(VERSION) .
+
+docker-run: ## Run the Docker image
+	@echo -e "$(OK_COLOR)Docker run $(APP):$(VERSION)$(NO_COLOR)"
+	@docker run --rm=true \
+		$(APP):$(VERSION) \
+		-log.level debug -pihole http://127.0.0.1:9180
 
 gox: ## Make all binaries
 	@echo -e "$(OK_COLOR)[$(APP)] Create binaries $(NO_COLOR)"
