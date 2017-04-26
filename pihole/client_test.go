@@ -1,4 +1,4 @@
-// Copyright (C) 2016 Nicolas Lamirault <nicolas.lamirault@gmail.com>
+// Copyright (C) 2016, 2017 Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -59,8 +59,8 @@ func TestPiholeGetMetrics(t *testing.T) {
 		log.Fatalf("%v", err)
 	}
 	log.Infof("Metrics response: %s", metrics)
-	if metrics.DomainsBeingBlocked != "101934" ||
-		metrics.DNSQueriesToday != "2593" {
+	if metrics.DomainsBeingBlocked != 101934 ||
+		metrics.DNSQueriesToday != 2593 {
 		log.Fatalf("Invalid metrics response: %s", metrics)
 	}
 }

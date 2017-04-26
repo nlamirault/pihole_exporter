@@ -1,4 +1,4 @@
-// Copyright (C) 2016 Nicolas Lamirault <nicolas.lamirault@gmail.com>
+// Copyright (C) 2016, 2017 Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,167 +19,43 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strconv"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 
-	"github.com/nlamirault/pihole_exporter/pihole"
-	exporter_version "github.com/nlamirault/pihole_exporter/version"
+	"github.com/nlamirault/pihole_exporter/exporter"
+	"github.com/nlamirault/pihole_exporter/version"
 )
 
 const (
 	banner = "pihole_exporter - %s\n"
-
-	namespace = "pihole"
 )
 
 var (
 	debug         bool
-	version       bool
+	vrs           bool
 	listenAddress string
 	metricsPath   string
 	endpoint      string
 	username      string
 	password      string
 	ids           string
-
-	domainsBeingBlocked = prometheus.NewDesc(
-		prometheus.BuildFQName(namespace, "", "domains_being_blocked"),
-		"Domains being blocked.",
-		nil, nil,
-	)
-	dnsQueries = prometheus.NewDesc(
-		prometheus.BuildFQName(namespace, "", "dns_queries_today"),
-		"DNS Queries today.",
-		nil, nil,
-	)
-	adsBlocked = prometheus.NewDesc(
-		prometheus.BuildFQName(namespace, "", "ads_blocked_today"),
-		"Ads blocked today.",
-		nil, nil,
-	)
-
-	adsPercentage = prometheus.NewDesc(
-		prometheus.BuildFQName(namespace, "", "ads_percentage_today"),
-		"Ads percentage today.",
-		nil, nil,
-	)
-
-	domainsOverTime = prometheus.NewDesc(
-		prometheus.BuildFQName(namespace, "", "domains_over_time"),
-		"Domains over time.",
-		nil, nil,
-	)
-
-	adsOverTime = prometheus.NewDesc(
-		prometheus.BuildFQName(namespace, "", "ads_over_time"),
-		"Ads over time.",
-		nil, nil,
-	)
-
-	topQueries = prometheus.NewDesc(
-		prometheus.BuildFQName(namespace, "", "top_queries"),
-		"Top queries.",
-		[]string{"domain"}, nil,
-	)
-
-	topAds = prometheus.NewDesc(
-		prometheus.BuildFQName(namespace, "", "top_ads"),
-		"Top Ads.",
-		[]string{"domain"}, nil,
-	)
-	topSources = prometheus.NewDesc(
-		prometheus.BuildFQName(namespace, "", "top_sources"),
-		"Top sources.",
-		[]string{"client"}, nil,
-	)
-	queryTypes = prometheus.NewDesc(
-		prometheus.BuildFQName(namespace, "", "query_types"),
-		"DNS Query types.",
-		[]string{"type"}, nil,
-	)
 )
-
-// Exporter collects Pihole stats from the given server and exports them using
-// the prometheus metrics package.
-type Exporter struct {
-	Pihole *pihole.Client
-}
-
-// NewExporter returns an initialized Exporter.
-func NewExporter(endpoint string) (*Exporter, error) {
-	log.Infoln("Setup Pihole exporter using URL: %s", endpoint)
-	pihole, err := pihole.NewClient(endpoint)
-	if err != nil {
-		return nil, err
-	}
-	return &Exporter{
-		Pihole: pihole,
-	}, nil
-}
-
-// Describe describes all the metrics ever exported by the Pihole exporter.
-// It implements prometheus.Collector.
-func (e *Exporter) Describe(ch chan<- *prometheus.Desc) {
-	ch <- domainsBeingBlocked
-	ch <- dnsQueries
-	ch <- adsBlocked
-	ch <- adsPercentage
-	ch <- domainsOverTime
-	ch <- adsOverTime
-	ch <- topQueries
-	ch <- topAds
-	ch <- topSources
-	ch <- queryTypes
-}
-
-// Collect the stats from channel and delivers them as Prometheus metrics.
-// It implements prometheus.Collector.
-func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
-	log.Infof("Pihole exporter starting")
-	resp, err := e.Pihole.GetMetrics()
-	if err != nil {
-		log.Errorf("Pihole error: %s", err.Error())
-		return
-	}
-	log.Infof("PiHole metrics: %#v", resp)
-	storeMetric(ch, resp.DomainsBeingBlocked, domainsBeingBlocked)
-	storeMetric(ch, resp.DNSQueriesToday, dnsQueries)
-	storeMetric(ch, resp.AdsBlockedToday, adsBlocked)
-	storeMetric(ch, resp.AdsPercentageToday, adsPercentage)
-	storeMetric(ch, resp.QueryA, queryTypes, "A")
-	storeMetric(ch, resp.QueryAAAA, queryTypes, "AAAA")
-	storeMetric(ch, resp.QueryPTR, queryTypes, "PTR")
-	storeMetric(ch, resp.QuerySOA, queryTypes, "SOA")
-	for domain, hits := range resp.TopQueries {
-		storeMetric(ch, hits, topQueries, domain)
-	}
-	for domain, hits := range resp.TopAds {
-		storeMetric(ch, hits, topAds, domain)
-	}
-	for client, requests := range resp.TopSources {
-		storeMetric(ch, requests, topSources, client)
-	}
-
-	log.Infof("Pihole exporter finished")
-}
 
 func init() {
 	// parse flags
-	flag.BoolVar(&version, "version", false, "print version and exit")
+	flag.BoolVar(&vrs, "version", false, "print version and exit")
 	flag.StringVar(&listenAddress, "web.listen-address", ":9311", "Address to listen on for web interface and telemetry.")
 	flag.StringVar(&metricsPath, "web.telemetry-path", "/metrics", "Path under which to expose metrics.")
 	flag.StringVar(&endpoint, "pihole", "", "Endpoint of Pihole")
 	flag.Usage = func() {
-		fmt.Fprint(os.Stderr, fmt.Sprintf(banner, exporter_version.Version))
+		fmt.Fprint(os.Stderr, fmt.Sprintf(banner, version.Version))
 		flag.PrintDefaults()
 	}
 
 	flag.Parse()
-
-	if version {
-		fmt.Printf("%s", exporter_version.Version)
+	if vrs {
+		fmt.Printf("%s", version.Version)
 		os.Exit(0)
 	}
 
@@ -189,7 +65,7 @@ func init() {
 }
 
 func main() {
-	exporter, err := NewExporter(endpoint)
+	exporter, err := exporter.NewExporter(endpoint)
 	if err != nil {
 		log.Errorf("Can't create exporter : %s", err)
 		os.Exit(1)
@@ -219,14 +95,4 @@ func usageAndExit(message string, exitCode int) {
 	}
 	flag.Usage()
 	os.Exit(exitCode)
-}
-
-func storeMetric(ch chan<- prometheus.Metric, value string, desc *prometheus.Desc, labels ...string) {
-	if val, err := strconv.ParseFloat(value, 64); err == nil {
-		ch <- prometheus.MustNewConstMetric(
-			desc, prometheus.GaugeValue, val, labels...)
-	} else {
-		log.Errorf("Can't store metric %s into %s: %s", value, desc, err.Error())
-	}
-
 }

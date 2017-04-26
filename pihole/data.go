@@ -1,4 +1,4 @@
-// Copyright (C) 2016 Nicolas Lamirault <nicolas.lamirault@gmail.com>
+// Copyright (C) 2016, 2017 Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,11 +18,11 @@
 package pihole
 
 type DomainsOverTime struct {
-	Stats map[string]string
+	Stats map[string]float64
 }
 
 type AdsOverTime struct {
-	Stats map[string]string
+	Stats map[string]float64
 }
 
 // type TopQueries struct {
@@ -38,19 +38,19 @@ type AdsOverTime struct {
 // }
 
 type Metrics struct {
-	DomainsBeingBlocked string            `json:"domains_being_blocked"`
-	DNSQueriesToday     string            `json:"dns_queries_today"`
-	AdsBlockedToday     string            `json:"ads_blocked_today"`
-	AdsPercentageToday  string            `json:"ads_percentage_today"`
-	DomainsOverTime     DomainsOverTime   `json:"domains_over_time"`
-	AdsOverTime         AdsOverTime       `json:"ads_over_time"`
-	TopQueries          map[string]string `json:"top_queries"`
-	TopAds              map[string]string `json:"top_ads"`
-	TopSources          map[string]string `json:"top_sources"`
-	QueryA              string            `json:"query[A]"`
-	QueryAAAA           string            `json:"query[AAAA]"`
-	QueryPTR            string            `json:"query[PTR]"`
-	QuerySOA            string            `json:"query[SOA]"`
-	Eight844            string            `json:"8.8.4.4"`
-	Eight888            string            `json:"8.8.8.8"`
+	DomainsBeingBlocked float64            `json:"domains_being_blocked"`
+	DNSQueriesToday     float64            `json:"dns_queries_today"`
+	AdsBlockedToday     float64            `json:"ads_blocked_today"`
+	AdsPercentageToday  float64            `json:"ads_percentage_today"`
+	DomainsOverTime     DomainsOverTime    `json:"domains_over_time"`
+	AdsOverTime         AdsOverTime        `json:"ads_over_time"`
+	TopQueries          map[string]float64 `json:"top_queries"`
+	TopAds              map[string]float64 `json:"top_ads"`
+	TopSources          map[string]float64 `json:"top_sources"`
+	QueryA              float64            `json:"query[A]"`
+	QueryAAAA           float64            `json:"query[AAAA]"`
+	QueryPTR            float64            `json:"query[PTR]"`
+	QuerySOA            float64            `json:"query[SOA]"`
+	Eight844            float64            `json:"8.8.4.4"`
+	Eight888            float64            `json:"8.8.8.8"`
 }
