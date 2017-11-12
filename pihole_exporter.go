@@ -144,10 +144,10 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 		return
 	}
 	log.Infof("PiHole metrics: %#v", resp)
-	storeMetric(ch, resp.DomainsBeingBlocked, domainsBeingBlocked)
-	storeMetric(ch, resp.DNSQueriesToday, dnsQueries)
-	storeMetric(ch, resp.AdsBlockedToday, adsBlocked)
-	storeMetric(ch, resp.AdsPercentageToday, adsPercentage)
+	storeMetric(ch, resp.DomainsBeingBlocked.String(), domainsBeingBlocked)
+	storeMetric(ch, resp.DNSQueriesToday.String(), dnsQueries)
+	storeMetric(ch, resp.AdsBlockedToday.String(), adsBlocked)
+	storeMetric(ch, resp.AdsPercentageToday.String(), adsPercentage)
 	storeMetric(ch, resp.QueryA, queryTypes, "A")
 	storeMetric(ch, resp.QueryAAAA, queryTypes, "AAAA")
 	storeMetric(ch, resp.QueryPTR, queryTypes, "PTR")

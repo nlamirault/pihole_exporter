@@ -17,6 +17,8 @@
 
 package pihole
 
+import "encoding/json"
+
 type DomainsOverTime struct {
 	Stats map[string]string
 }
@@ -38,10 +40,10 @@ type AdsOverTime struct {
 // }
 
 type Metrics struct {
-	DomainsBeingBlocked string            `json:"domains_being_blocked"`
-	DNSQueriesToday     string            `json:"dns_queries_today"`
-	AdsBlockedToday     string            `json:"ads_blocked_today"`
-	AdsPercentageToday  string            `json:"ads_percentage_today"`
+	DomainsBeingBlocked json.Number       `json:"domains_being_blocked"`
+	DNSQueriesToday     json.Number       `json:"dns_queries_today"`
+	AdsBlockedToday     json.Number       `json:"ads_blocked_today"`
+	AdsPercentageToday  json.Number       `json:"ads_percentage_today"`
 	DomainsOverTime     DomainsOverTime   `json:"domains_over_time"`
 	AdsOverTime         AdsOverTime       `json:"ads_over_time"`
 	TopQueries          map[string]string `json:"top_queries"`
