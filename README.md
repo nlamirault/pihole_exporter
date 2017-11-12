@@ -35,10 +35,6 @@ Launch the Prometheus exporter :
 
 ## Development
 
-* Initialize environment
-
-        $ make init
-
 * Build tool :
 
         $ make build
