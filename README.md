@@ -61,6 +61,17 @@ Launch the Prometheus exporter :
         $ docker run -d --name=grafana -p 3000:3000 grafana/grafana
 
 
+## Docker Deployment
+
+* Build Image:
+
+		$ docker build -t pihole-exporter .
+
+* Start Container
+		
+		$ docker run -d -p 9311:9311 pihole-exporter -pihole http://192.168.1.5
+
+
 ## Contributing
 
 See [CONTRIBUTING](CONTRIBUTING.md).
