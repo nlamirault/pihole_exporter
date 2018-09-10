@@ -14,7 +14,6 @@
 
 FROM alpine:latest
 
-
 LABEL summary="PiHole Exporter Docker image" \
       description="Prometheus Exporter for PiHole" \
       name="nlamirault/pihole_exporter" \
