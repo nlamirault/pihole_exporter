@@ -45,9 +45,9 @@ This Prometheus exporter check your [Pi-Hole](https://pi-hole.net/) statistics. 
 
 You can download the binaries :
 
-* Architecture i386 [ [linux](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.2.0_linux_386) / [darwin](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.2.0_darwin_386) / [freebsd](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.2.0_freebsd_386) / [netbsd](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.2.0_netbsd_386) / [openbsd](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.2.0_openbsd_386) / [windows](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.2.0_windows_386.exe) ]
-* Architecture amd64 [ [linux](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.2.0_linux_amd64) / [darwin](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.2.0_darwin_amd64) / [freebsd](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.2.0_freebsd_amd64) / [netbsd](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.2.0_netbsd_amd64) / [openbsd](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.2.0_openbsd_amd64) / [windows](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.2.0_windows_amd64.exe) ]
-* Architecture arm [ [linux](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.2.0_linux_arm) / [freebsd](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.2.0_freebsd_arm) / [netbsd](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.2.0_netbsd_arm) ]
+* Architecture i386 [ [linux](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.3.0_linux_386) / [darwin](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.3.0_darwin_386) / [freebsd](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.3.0_freebsd_386) / [netbsd](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.3.0_netbsd_386) / [openbsd](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.3.0_openbsd_386) / [windows](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.3.0_windows_386.exe) ]
+* Architecture amd64 [ [linux](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.3.0_linux_amd64) / [darwin](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.3.0_darwin_amd64) / [freebsd](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.3.0_freebsd_amd64) / [netbsd](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.3.0_netbsd_amd64) / [openbsd](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.3.0_openbsd_amd64) / [windows](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.3.0_windows_amd64.exe) ]
+* Architecture arm [ [linux](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.3.0_linux_arm) / [freebsd](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.3.0_freebsd_arm) / [netbsd](https://bintray.com/artifact/download/nlamirault/oss/pihole_exporter-0.3.0_netbsd_arm) ]
 
 
 ## Usage
@@ -92,7 +92,7 @@ Launch the Prometheus exporter :
 		$ docker build -t pihole-exporter .
 
 * Start Container
-		
+
 		$ docker run -d -p 9311:9311 pihole-exporter -pihole http://192.168.1.5
 
 
