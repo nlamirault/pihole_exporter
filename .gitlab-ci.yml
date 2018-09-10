@@ -36,7 +36,7 @@ build:gitlab:
   <<: *docker_gitlab
   stage: build
   script:
-    - export VERSION=$(grep "const Version" version/version.go)
+    - export VERSION=$(grep "const Version" version/version.go|awk -F'=' '{print $$2}'|sed -e "s/[^0-9.]//g")
     - echo ${VERSION}
     - docker build -t "$CI_REGISTRY_IMAGE:${VERSION}.latest"
     - docker push "$CI_REGISTRY_IMAGE:${VERSION}.latest"
@@ -47,7 +47,7 @@ build:hub:
   <<: *docker_hub
   stage: build
   script:
-    - export VERSION=$(grep "const Version" version/version.go)
+    - export VERSION=$(grep "const Version" version/version.go|awk -F'=' '{print $$2}'|sed -e "s/[^0-9.]//g")
     - echo ${VERSION}
     - docker build -t "nlamirault/$CI_PROJECT_NAME:${VERSION}.latest"
     - docker push "nlamirault/$CI_PROJECT_NAME:${VERSION}.latest"
@@ -58,7 +58,7 @@ deploy:gitlab:
   <<: *docker_gitlab
   stage: deploy
   script:
-    - export VERSION=$(grep "const Version" version/version.go)
+    - export VERSION=$(grep "const Version" version/version.go|awk -F'=' '{print $$2}'|sed -e "s/[^0-9.]//g")
     - echo ${VERSION}
     - docker build -t "$CI_REGISTRY_IMAGE:v${VERSION}"
     - docker push "$CI_REGISTRY_IMAGE:v${VERSION}"
@@ -69,7 +69,7 @@ deploy:hub:
   <<: *docker_hub
   stage: deploy
   script:
-    - export VERSION=$(grep "const Version" version/version.go)
+    - export VERSION=$(grep "const Version" version/version.go|awk -F'=' '{print $$2}'|sed -e "s/[^0-9.]//g")
     - echo ${VERSION}
     - docker build -t "nlamirault/$CI_PROJECT_NAME:v${VERSION}"
     - docker push "nlamirault/$CI_PROJECT_NAME:v${VERSION}.arm"
