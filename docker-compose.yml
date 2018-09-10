@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-version: '2'
+version: '3'
 
 volumes:
     prometheus_data: {}
@@ -25,12 +25,14 @@ networks:
 services:
 
   exporter:
-    image: .
-    container_name: pihole_exporter
+    build: .
+    container_name: exporter
+    depends_on:
+      - pihole
     ports:
-      - 9311
+      - "9311:9311"
     command:
-      -log.level=debug -pihole pihole:9180
+      - 'log.level=debug -pihole http://pihole:9180'
     networks:
       - pihole
 
@@ -39,8 +41,8 @@ services:
     container_name: pihole
     environment:
         # Your docker host IP is required if you run RUN (not build)
-        ServerIP: 10.33.1.81
-        DNS1: 8.8.8.8
+        - ServerIP=10.33.1.81
+        - DNS1=8.8.8.8
     ports:
       - "53:53/tcp"
       - "53:53/udp"

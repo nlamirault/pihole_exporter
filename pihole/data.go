@@ -1,4 +1,4 @@
-// Copyright (C) 2016, 2017 Nicolas Lamirault <nicolas.lamirault@gmail.com>
+// Copyright (C) 2016-2018 Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,26 +17,7 @@
 
 package pihole
 
-type DomainsOverTime struct {
-	Stats map[string]float64
-}
-
-type AdsOverTime struct {
-	Stats map[string]float64
-}
-
-// type TopQueries struct {
-// 	Stats map[string]string
-// }
-
-// type TopAds struct {
-// 	Stats map[string]string
-// }
-
-// type TopSources struct {
-// 	Stats map[string]string
-// }
-
+// Metrics define PiHome Prometheus metrics
 type Metrics struct {
 	DomainsBeingBlocked float64            `json:"domains_being_blocked"`
 	DNSQueriesToday     float64            `json:"dns_queries_today"`
