@@ -1,4 +1,4 @@
-# Copyright (C) 2016, 2017 Nicolas Lamirault <nicolas.lamirault@gmail.com>
+# Copyright (C) 2016-2018 Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,8 +13,14 @@
 # limitations under the License.
 
 FROM alpine:latest
-MAINTAINER Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
+
+LABEL summary="PiHole Exporter Docker image" \
+      description="Prometheus Exporter for PiHole" \
+      name="nlamirault/pihole_exporter" \
+      version="stable" \
+      url="https://github.com/nlamirault/pihole_exporter" \
+      maintainer="Nicolas Lamirault <nicolas.lamirault@gmail.com>"
 
 ENV PATH /go/bin:/usr/local/go/bin:$PATH
 ENV GOPATH /go
@@ -32,7 +38,7 @@ RUN set -x \
        libc-dev \
        libgcc \
     && cd /go/src/github.com/nlamirault/pihole_exporter \
-    && go build -o pihole_exporter . \
+    && go build -o /usr/bin/pihole_exporter . \
     && apk del .build-deps \
     && rm -rf /go \
     && echo "Build complete."
