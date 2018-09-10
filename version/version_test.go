@@ -12,7 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// This the package for the PiHole API
-// See: https://github.com/pi-hole/AdminLTE
+package version
 
-package pihole
+import (
+	// "fmt"
+	"regexp"
+	"testing"
+)
+
+func Test_Version(t *testing.T) {
+	validVersion := regexp.MustCompile(`^[0-9]+\.[0-9]+\.[0-9]+$`)
+	if !validVersion.MatchString(Version) {
+		t.Fatal("Invalid version")
+	}
+}

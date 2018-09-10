@@ -1,4 +1,4 @@
-// Copyright (C) 2016 Nicolas Lamirault <nicolas.lamirault@gmail.com>
+// Copyright (C) 2016-2018 Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -59,8 +59,19 @@ func TestPiholeGetMetrics(t *testing.T) {
 		log.Fatalf("%v", err)
 	}
 	log.Infof("Metrics response: %s", metrics)
-	if metrics.DomainsBeingBlocked != "101934" ||
-		metrics.DNSQueriesToday != "2593" {
-		log.Fatalf("Invalid metrics response: %s", metrics)
+	if metrics.DomainsBeingBlocked != 116759 ||
+		metrics.AdsBlockedToday != 128 ||
+		metrics.DNSQueriesToday != 37589 {
+		log.Fatalf("Invalid global metrics response: %s", metrics)
+	}
+	if len(metrics.TopQueries) != 10 {
+		log.Fatalf("Invalid Top Queries metrics: %s", metrics.TopQueries)
+	}
+	if len(metrics.TopAds) != 10 {
+		log.Fatalf("Invalid Top Ads metrics: %s", metrics.TopAds)
+	}
+	if metrics.QueryA != 8714 ||
+		metrics.QueryAAAA != 28875 {
+		log.Fatalf("Invalid Queries types: %d %d", metrics.QueryA, metrics.QueryAAAA)
 	}
 }

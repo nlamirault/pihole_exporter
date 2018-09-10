@@ -1,4 +1,4 @@
-// Copyright (C) 2016 Nicolas Lamirault <nicolas.lamirault@gmail.com>
+// Copyright (C) 2016-2018 Nicolas Lamirault <nicolas.lamirault@gmail.com>
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ func (c *Client) setupHeaders(request *http.Request) {
 
 func (client *Client) GetMetrics() (*Metrics, error) {
 	log.Infof("Get metrics")
-	resp, err := http.Get(fmt.Sprintf("%s/admin/api.php?summaryRaw&overTimeData&topItems&recentItems&getQueryTypes&getForwardDestinations&getQuerySources", client.Endpoint))
+	resp, err := http.Get(fmt.Sprintf("%s/admin/api.php?summaryRaw&overTimeData&topItems&recentItems&getQueryTypes&getForwardDestinations&getQuerySources&jsonForceObject", client.Endpoint))
 	if err != nil {
 		return nil, err
 	}
