@@ -40,8 +40,8 @@ build:gitlab:
     - echo ${VERSION}
     - docker build -t "$CI_REGISTRY_IMAGE:${VERSION}.latest"
     - docker push "$CI_REGISTRY_IMAGE:${VERSION}.latest"
-  only:
-    - master
+  # only:
+  #   - master
 
 build:hub:
   <<: *docker_hub
@@ -51,8 +51,8 @@ build:hub:
     - echo ${VERSION}
     - docker build -t "nlamirault/$CI_PROJECT_NAME:${VERSION}.latest"
     - docker push "nlamirault/$CI_PROJECT_NAME:${VERSION}.latest"
-  only:
-    - master
+  # only:
+  #   - master
 
 deploy:gitlab:
   <<: *docker_gitlab
