@@ -17,6 +17,8 @@
 
 package pihole
 
+import "encoding/json"
+
 type DomainsOverTime struct {
 	Stats map[string]string
 }

@@ -15,84 +15,83 @@
 package main
 
 import (
-	"flag"
-	"fmt"
-	"net/http"
-	"os"
+        "flag"
+        "fmt"
+        "net/http"
+        "os"
 
-	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/common/log"
+        "github.com/prometheus/client_golang/prometheus"
+        "github.com/prometheus/common/log"
 
-	"github.com/nlamirault/pihole_exporter/exporter"
-	"github.com/nlamirault/pihole_exporter/version"
+        "github.com/nlamirault/pihole_exporter/exporter"
+        "github.com/nlamirault/pihole_exporter/version"
 )
 
 const (
-	banner = "pihole_exporter - %s\n"
+        banner = "pihole_exporter - %s\n"
 )
 
 var (
-	debug         bool
-	vrs           bool
-	listenAddress string
-	metricsPath   string
-	endpoint      string
-	username      string
-	password      string
-	ids           string
+        debug         bool
+        vrs           bool
+        listenAddress string
+        metricsPath   string
+        endpoint      string
+        username      string
+        password      string
+        ids           string
 )
 
 func init() {
-	// parse flags
-	flag.BoolVar(&vrs, "version", false, "print version and exit")
-	flag.StringVar(&listenAddress, "web.listen-address", ":9311", "Address to listen on for web interface and telemetry.")
-	flag.StringVar(&metricsPath, "web.telemetry-path", "/metrics", "Path under which to expose metrics.")
-	flag.StringVar(&endpoint, "pihole", "", "Endpoint of Pihole")
-	flag.Usage = func() {
-		fmt.Fprint(os.Stderr, fmt.Sprintf(banner, version.Version))
-		flag.PrintDefaults()
-	}
+        // parse flags
+        flag.BoolVar(&vrs, "version", false, "print version and exit")
+        flag.StringVar(&listenAddress, "web.listen-address", ":9311", "Address to listen on for web interface and telemetry.")
+        flag.StringVar(&metricsPath, "web.telemetry-path", "/metrics", "Path under which to expose metrics.")
+        flag.StringVar(&endpoint, "pihole", "", "Endpoint of Pihole")
+        flag.Usage = func() {
+                fmt.Fprint(os.Stderr, fmt.Sprintf(banner, version.Version))
+                flag.PrintDefaults()
+        }
 
-	flag.Parse()
-	if vrs {
-		fmt.Printf("%s", version.Version)
-		os.Exit(0)
-	}
+        flag.Parse()
+        if vrs {
+                fmt.Printf("%s", version.Version)
+                os.Exit(0)
+        }
 
-	if len(endpoint) == 0 {
-		usageAndExit("Pihole endpoint cannot be empty.", 1)
-	}
+        if len(endpoint) == 0 {
+                usageAndExit("Pihole endpoint cannot be empty.", 1)
+        }
 }
 
 func main() {
-	exporter, err := exporter.NewExporter(endpoint)
-	if err != nil {
-		log.Errorf("Can't create exporter : %s", err)
-		os.Exit(1)
-	}
-	log.Infoln("Register exporter")
-	prometheus.MustRegister(exporter)
+        exporter, err := exporter.NewExporter(endpoint)
+        if err != nil {
+                log.Errorf("Can't create exporter : %s", err)
+                os.Exit(1)
+        }
+        log.Infoln("Register exporter")
+        prometheus.MustRegister(exporter)
 
-	http.Handle(metricsPath, prometheus.Handler())
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte(`<html>
+        http.Handle(metricsPath, prometheus.Handler())
+        http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+                w.Write([]byte(`<html>
              <head><title>Pihole Exporter</title></head>
              <body>
              <h1>Pihole Exporter</h1>
              <p><a href='` + metricsPath + `'>Metrics</a></p>
              </body>
              </html>`))
-	})
+        })
 
-	log.Infoln("Listening on", listenAddress)
-	log.Fatal(http.ListenAndServe(listenAddress, nil))
+        log.Infoln("Listening on", listenAddress)
+        log.Fatal(http.ListenAndServe(listenAddress, nil))
 }
-
 func usageAndExit(message string, exitCode int) {
-	if message != "" {
-		fmt.Fprintf(os.Stderr, message)
-		fmt.Fprintf(os.Stderr, "\n")
-	}
-	flag.Usage()
-	os.Exit(exitCode)
+        if message != "" {
+                fmt.Fprintf(os.Stderr, message)
+                fmt.Fprintf(os.Stderr, "\n")
+        }
+        flag.Usage()
+        os.Exit(exitCode)
 }

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM alpine:latest
+FROM golang:alpine AS build
 
 LABEL summary="PiHole Exporter Docker image" \
       description="Prometheus Exporter for PiHole" \
@@ -21,25 +21,14 @@ LABEL summary="PiHole Exporter Docker image" \
       url="https://github.com/nlamirault/pihole_exporter" \
       maintainer="Nicolas Lamirault <nicolas.lamirault@gmail.com>"
 
-ENV PATH /go/bin:/usr/local/go/bin:$PATH
-ENV GOPATH /go
+RUN apk add --no-cache alpine-sdk bash
+WORKDIR /go/src/github.com/nlamirault/pihole_exporter
+COPY . .
+RUN go build -o /app/pihole_exporter pihole_exporter.go && chmod +x /app/pihole_exporter
 
-RUN apk add --no-cache \
-    ca-certificates
-
-COPY . /go/src/github.com/nlamirault/pihole_exporter
-
-RUN set -x \
-    && apk add --no-cache --virtual .build-deps \
-       go \
-       git \
-       gcc \
-       libc-dev \
-       libgcc \
-    && cd /go/src/github.com/nlamirault/pihole_exporter \
-    && go build -o /usr/bin/pihole_exporter . \
-    && apk del .build-deps \
-    && rm -rf /go \
-    && echo "Build complete."
-
-ENTRYPOINT ["pihole_exporter"]
+FROM alpine:latest
+COPY --from=build /app/pihole_exporter /app/pihole_exporter
+WORKDIR /app
+ENTRYPOINT ["./pihole_exporter"]
+CMD ["-h"]
+EXPOSE 9311

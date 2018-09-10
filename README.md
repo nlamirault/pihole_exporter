@@ -28,6 +28,15 @@ pihole_query_types{type="AAAA"} 0
 pihole_query_types{type="PTR"} 0
 pihole_query_types{type="SOA"} 0
 ```
+=======
+This Prometheus exporter check your [Pi-Hole](https://pi-hole.net/) statistics. Available metrics are :
+* Ads blocked
+* Domains blocked
+* DNS Queries
+* Top Ads
+* Top Queries
+* Top clients
+
 
 ![Dashboard](pihole-0.1.0.png)
 
@@ -49,10 +58,6 @@ Launch the Prometheus exporter :
 
 
 ## Development
-
-* Initialize environment
-
-        $ make init
 
 * Build tool :
 
@@ -78,6 +83,17 @@ Launch the Prometheus exporter :
 * Run Grafana and import the dashboard *dashboard.json*:
 
         $ docker run -d --name=grafana -p 3000:3000 grafana/grafana
+
+
+## Docker Deployment
+
+* Build Image:
+
+		$ docker build -t pihole-exporter .
+
+* Start Container
+		
+		$ docker run -d -p 9311:9311 pihole-exporter -pihole http://192.168.1.5
 
 
 ## Contributing
