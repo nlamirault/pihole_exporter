@@ -17,6 +17,14 @@
 
 package pihole
 
+type DomainsOverTime struct {
+	Stats map[string]string
+}
+
+type AdsOverTime struct {
+	Stats map[string]string
+}
+
 // Metrics define PiHome Prometheus metrics
 type Metrics struct {
 	DomainsBeingBlocked float64            `json:"domains_being_blocked"`
