@@ -6,10 +6,28 @@
 * Master : [![Circle CI](https://circleci.com/gh/nlamirault/pihole_exporter/tree/master.svg?style=svg)](https://circleci.com/gh/nlamirault/pihole_exporter/tree/master)
 * Develop : [![Circle CI](https://circleci.com/gh/nlamirault/pihole_exporter/tree/develop.svg?style=svg)](https://circleci.com/gh/nlamirault/pihole_exporter/tree/develop)
 
-This Prometheus exporter check your network connection. Metrics are :
-* Latency
-* Download bandwidth
-* Upload bandwidth
+Example of available metrics:
+
+```
+# HELP pihole_ads_blocked_today Ads blocked today.
+# TYPE pihole_ads_blocked_today gauge
+pihole_ads_blocked_today 407
+# HELP pihole_ads_percentage_today Ads percentage today.
+# TYPE pihole_ads_percentage_today gauge
+pihole_ads_percentage_today 13.777928
+# HELP pihole_dns_queries_today DNS Queries today.
+# TYPE pihole_dns_queries_today gauge
+pihole_dns_queries_today 2954
+# HELP pihole_domains_being_blocked Domains being blocked.
+# TYPE pihole_domains_being_blocked gauge
+pihole_domains_being_blocked 133209
+# HELP pihole_query_types DNS Query types.
+# TYPE pihole_query_types gauge
+pihole_query_types{type="A"} 0
+pihole_query_types{type="AAAA"} 0
+pihole_query_types{type="PTR"} 0
+pihole_query_types{type="SOA"} 0
+```
 
 ![Dashboard](pihole-0.1.0.png)
 
@@ -27,7 +45,7 @@ You can download the binaries :
 
 Launch the Prometheus exporter :
 
-    $ pihole_exporter -log.level=debug
+    $ pihole_exporter -log.level=debug -pihole http://192.168.1.227
 
 
 ## Development
